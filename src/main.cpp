@@ -14,6 +14,8 @@ const uint16_t STEPPER_STEPS = 2048;
 const uint16_t STEPPER_RPM = 10;
 
 const uint8_t SERVO_PIN = 10;
+const uint16_t SERVO_MIN_US = 700;
+const uint16_t SERVO_MAX_US = 2300;
 
 Stepper leftStepper(STEPPER_STEPS, LEFT_STEPPER_PIN_1, LEFT_STEPPER_PIN_2,
                     LEFT_STEPPER_PIN_3, LEFT_STEPPER_PIN_4);
@@ -28,16 +30,16 @@ void setup() {
 
   leftStepper.setSpeed(STEPPER_RPM);
   rightStepper.setSpeed(STEPPER_RPM);
-  servo.attach(SERVO_PIN);
+  servo.attach(SERVO_PIN, SERVO_MIN_US, SERVO_MAX_US);
 }
 
 void loop() {
-  leftStepper.step(10);
-  rightStepper.step(10);
+  leftStepper.step(5);
+  rightStepper.step(5);
 
   static uint8_t angle = 0;
   static int8_t dir = 1;
-  servo.write(angle);
+  servo.writeMicroseconds(map(angle, 0, 180, SERVO_MIN_US, SERVO_MAX_US));
   angle += dir;
   if (angle == 0 || angle == 180) {
     dir *= -1;
